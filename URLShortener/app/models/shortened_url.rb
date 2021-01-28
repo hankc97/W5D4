@@ -18,6 +18,15 @@ class ShortenedUrl < ApplicationRecord
     primary_key: :id,
     foreign_key: :user_id,
     class_name: :User
+
+    has_many :visits,
+    primary_key: :id,
+    foreign_key: :short_url_id,
+    class_name: :Visit
+
+    has_many :visitors,
+    through: :visits,
+    source: :visitor
     
     def self.random_code
         
@@ -31,4 +40,21 @@ class ShortenedUrl < ApplicationRecord
     def self.short_url_factory(user, long_url)
         ShortenedUrl.create!(:user_id => user.id, :long_url => long_url, :short_url => ShortenedUrl.random_code)
     end
+
+    def num_clicks
+        self.visits.count
+    end
+
+    def num_uniques
+    #     play = PlayDBConnection.instance.execute(<<-SQL, title)
+    #         SELECT
+    #             *
+    #         FROM
+    #     plays
+    #   WHERE
+    #     title = ?
+    # SQL
+
+    end
+    
 end
